@@ -1,0 +1,418 @@
+/* =========================================================
+   Painel de Mesas 
+   Estrutura: tokens → base → layout → componentes → responsivo
+   ========================================================= */
+
+:root {
+    --bg: #12171c;
+    --bg-soft: #1a2128;
+    --surface: #202931;
+    --border: rgba(255, 255, 255, 0.07);
+
+    --text: #f2f5f7;
+    --text-muted: #94a1ad;
+    --ink: #1b2229;
+    /* texto escuro dos cards */
+
+    --available: #bfe3c6;
+    --available-strong: #2f7a45;
+    --occupied: #f1b4b0;
+    --occupied-strong: #a8332d;
+
+    --radius-lg: 4px;
+    --radius-md: 4px;
+    --shadow-card: 0 10px 28px rgba(0, 0, 0, 0.28);
+
+    --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-serif: "Playfair Display", Georgia, serif;
+}
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: var(--font-sans);
+    color: var(--text);
+    background:
+        radial-gradient(1100px 600px at 15% -10%, rgba(120, 170, 140, 0.12), transparent 60%),
+        radial-gradient(900px 500px at 100% 0%, rgba(200, 120, 110, 0.08), transparent 60%),
+        var(--bg);
+    -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+p,
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+ul {
+    list-style: none;
+}
+
+/* ---------- Layout ---------- */
+.app {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: clamp(20px, 3vw, 48px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(24px, 3vw, 40px);
+}
+
+/* ---------- Cabeçalho ---------- */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.brand__logo {
+    width: 54px;
+    height: 54px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    color: var(--available);
+    background: linear-gradient(145deg, #27323b, #1b232a);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+}
+
+.brand__name {
+    font-family: var(--font-serif);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+.brand__sub {
+    margin-top: 2px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+}
+
+.clock {
+    text-align: right;
+}
+
+.clock__time {
+    display: block;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.clock__date {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+/* ---------- Indicadores ---------- */
+.kpis {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.kpi {
+    position: relative;
+    overflow: hidden;
+    padding: 22px 24px;
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-card);
+}
+
+.kpi::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 5px;
+    background: var(--accent, var(--text-muted));
+}
+
+.kpi__label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+}
+
+.kpi__value {
+    margin-top: 8px;
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.kpi--total {
+    --accent: #8fa3b5;
+}
+
+.kpi--available {
+    --accent: var(--available);
+}
+
+.kpi--occupied {
+    --accent: var(--occupied);
+}
+
+.kpi--reserved {
+    --accent: var(--reserved);
+}
+
+/* ---------- Área principal ---------- */
+.board__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.board__title {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.legend li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.0rem;
+    color: var(--text-muted);
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.dot--available {
+    background: var(--available);
+}
+
+.dot--occupied {
+    background: var(--occupied);
+}
+
+.dot--reserved {
+    background: var(--reserved);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+}
+
+/* ---------- Card da mesa ---------- */
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    padding: 26px;
+    min-height: 210px;
+    border-radius: var(--radius-lg);
+    color: var(--ink);
+    background: var(--card-bg);
+    box-shadow: var(--shadow-card);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.38);
+}
+
+.card--available {
+    --card-bg: var(--available);
+    --strong: var(--available-strong);
+}
+
+.card--occupied {
+    --card-bg: var(--occupied);
+    --strong: var(--occupied-strong);
+}
+
+.card--reserved {
+    --card-bg: var(--reserved);
+    --strong: var(--reserved-strong);
+}
+
+.card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.card__id {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.card__icon {
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.55);
+    color: var(--ink);
+}
+
+.card__name {
+    font-size: 1.4rem;
+    font-weight: 800;
+    line-height: 1.05;
+    white-space: nowrap;
+}
+
+.card__seats {
+    margin-top: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    opacity: 0.7;
+}
+
+.badge {
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 1rem;
+    padding: 8px 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--strong);
+    white-space: nowrap;
+}
+
+.card__bottom {
+    margin-top: auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.card__time-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.65;
+}
+
+.card__time {
+    display: block;
+    margin-top: 2px;
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+}
+
+.card__note {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: right;
+    opacity: 0.75;
+    white-space: nowrap;
+}
+
+/* ---------- Rodapé ---------- */
+.footer {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 900px) {
+    .kpis {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 560px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .clock {
+        text-align: left;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        min-height: 190px;
+        padding: 22px;
+    }
+}
+
+/* Telas grandes / TVs */
+@media (min-width: 1600px) {
+    .app {
+        max-width: 1800px;
+    }
+
+    .grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .card {
+        transition: none;
+    }
+
+    .card:hover {
+        transform: none;
+    }
+}
